@@ -5,13 +5,8 @@
 var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
-var morgan = require('morgan');
+var morgan     = require('morgan');
 
-var jsontest = {"employees":[
-    {"firstName":"John", "lastName":"Doe"},
-    {"firstName":"Anna", "lastName":"Smith"},
-    {"firstName":"Peter", "lastName":"Jones"}
-]}; 
 // configure app
 app.use(morgan('dev')); // log requests to the console
 
@@ -32,7 +27,7 @@ conn.once('open', function () {
     console.log('connected');
 });
 
-var Bear     = require('./app/models/bear');
+var User     = require('./app/models/user');
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -50,81 +45,96 @@ router.use(function(req, res, next) {
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function(req, res) {
     //res.json({ message: 'Welcome to our LifesMoments api!' });
-    res.json(jsontest);
+    res.sendfile('doc.txt');
 });
 
-// on routes that end in /bears
+// on routes that end in /users
 // ----------------------------------------------------
-router.route('/bears')
+router.route('/users')
 
 	// create a bear (accessed at POST http://localhost:8080/api/bears)
 	.post(function(req, res) {
-		
-	    var bear = new Bear();		// create a new instance of the Bear model
+		        
+	    if (typeof req.body.name === 'undefined') {
+	        res.json({ message: 'Input is undefined' });
+	    };
+	    
+	    var user = new User();		// create a new instance of the Bear model
 
-	    bear.name = req.body.name;  // set the bears name (comes from the request)
+	    user.name = req.body.name;  // set the bears name (comes from the request)
+	    user.password = req.body.password;
 
-		bear.save(function(err) {
+		user.save(function(err) {
 			if (err)
-			    res.send(err);
+			    res.json({ message: 'User Exist!' });
 
-			res.json({ message: 'Bear created!' });
+			res.json({ message: 'User Created!' });
 		});
 
 	})
 
 	// get all the bears (accessed at GET http://localhost:8080/api/bears)
 	.get(function(req, res) {
-		Bear.find(function(err, bears) {
+		User.find(function(err, user) {
 			if (err)
 				res.send(err);
 
-			res.json(bears);
+			res.json(user);
 	    });
 	});
 
-// on routes that end in /bears/:bear_id
-// ----------------------------------------------------
-router.route('/bears/:bear_id')
 
-	// get the bear with that id
-	.get(function(req, res) {
-		Bear.findById(req.params.bear_id, function(err, bear) {
-			if (err)
-				res.send(err);
-			res.json(bear);
-		});
-	})
 
-	// update the bear with this id
-	.put(function(req, res) {
-		Bear.findById(req.params.bear_id, function(err, bear) {
+//// on routes that end in /doc
+//// ----------------------------------------------------
+router.route('/doc')
+.get(function (req, res) {
+    res.sendfile('doc.txt');   //send documentation for API usage
+});
 
-			if (err)
-				res.send(err);
 
-			bear.name = req.body.name;
-			bear.save(function(err) {
-				if (err)
-					res.send(err);
+//// on routes that end in /bears/:bear_id
+//// ----------------------------------------------------
+//router.route('/bears/:bear_id')
 
-				res.json({ message: 'Bear updated!' });
-			});
+//	// get the bear with that id
+//	.get(function(req, res) {
+//		Bear.findById(req.params.bear_id, function(err, bear) {
+//			if (err)
+//				res.send(err);
+//			res.json(bear);
+//		});
+//	})
 
-		});
-	})
+//	// update the bear with this id
+//	.put(function(req, res) {
+//		Bear.findById(req.params.bear_id, function(err, bear) {
 
-	// delete the bear with this id
-	.delete(function(req, res) {
-		Bear.remove({
-			_id: req.params.bear_id
-		}, function(err, bear) {
-			if (err)
-				res.send(err);
+//			if (err)
+//				res.send(err);
 
-			res.json({ message: 'Successfully deleted' });
-		});
-	});
+//			bear.name = req.body.name;
+//			bear.save(function(err) {
+//				if (err)
+//					res.send(err);
+
+//				res.json({ message: 'Bear updated!' });
+//			});
+
+//		});
+//	})
+
+//	// delete the bear with this id
+//	.delete(function(req, res) {
+//		Bear.remove({
+//			_id: req.params.bear_id
+//		}, function(err, bear) {
+//			if (err)
+//				res.send(err);
+
+//			res.json({ message: 'Successfully deleted' });
+//		});
+//	});
 
 
 // REGISTER OUR ROUTES -------------------------------

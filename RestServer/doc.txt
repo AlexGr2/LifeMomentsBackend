@@ -1,0 +1,66 @@
+
+Doc's symbol usage :
+	$ - user's input
+
+User creation : 
+	
+	RestAPI route  : "domain.../api/users"
+	http verb used :  "POST"
+	Header : Content-Type: application/json	
+
+	JSON - 
+		{
+		   "name" : "$name",
+		   "password" : "$password"
+
+		}
+
+	In the case of success a new user will be created in the DB with the given name and 
+	password. 
+	Respond is send to a caller with JSON :
+		
+	JSON - 
+		{
+		   "message" : "User Created!"			
+		}
+		
+	In the case User with the same name exist in the DB following error will acquire
+	"TypeError - Name is taken".
+	Respond is send to a caller with JSON :
+		
+	JSON - 
+		{
+		   "message" : "User exist!"	
+		}
+	
+	
+	In the case of corrupted or improper request following respond will be send
+	to a caller :
+	
+	JSON - 
+		{
+		   "message" : "Input is undefined"
+		}
+	 
+
+
+
+Request all the users currently in the DB (for test propuse only!!!) :
+	
+	RestAPI route  : "domain.../api/users"
+	http verb used :  "GET"
+
+	In the case of success following respond will be send to a caller :
+
+	JSON - 
+	      [
+		{
+		 "_id" : %User_id%,
+		 "password" : %User_password%,
+		 "name" : %User_name%
+	        }
+		.
+		.
+		.
+		.
+	      ]
