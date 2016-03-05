@@ -1,6 +1,6 @@
 # Building a RESTful API in Node and Express for LifeMoments 
 
-Using the new Express 4.0 Router to build an API
+Using the new Express 4.0 Router to build an API for LifeMoments App
 
 ## Requirements
 
