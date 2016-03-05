@@ -1,6 +1,7 @@
 
 Doc's symbol usage :
 	$ - user's input
+ 	%% - values between this symbol is given by backend
 
 User creation : 
 	
@@ -64,3 +65,89 @@ Request all the users currently in the DB (for test propuse only!!!) :
 		.
 		.
 	      ]
+
+Save shared story :
+	
+	RestAPI route  : "domain.../api/story"
+	http verb used :  "POST"
+	Header : Content-Type: application/json	
+
+	JSON (minified - test only) - 
+		{
+		  "username" : "$username",
+ 
+		  "storyID": "$storyID",
+  
+  
+		  "startLocation": "$startLocation",
+  
+		  "endLocation": "$endLocation",
+  
+ 	          "style": "$style",
+  
+		  "sharedFlag": "$sharedFlag"
+		}
+
+
+	In the case of success a new shared Story will be created on the DB with the given id and. 
+	Respond is send to a caller with JSON :
+		
+	JSON - 
+		{
+		   "message" : "Story Saved!"			
+		}
+
+
+	In the case Story with the same id exist in the DB following error will acquire
+	"TypeError - duplicate id".
+	Respond is send to a caller with JSON :
+		
+	JSON - 
+		{
+		   "message" : "Story exist!"	//re-shared stories won't be duplicated, origin story will be used instead
+		}
+
+	
+	In the case of corrupted or improper request following respond will be send
+	to a caller :
+	
+	JSON - 
+		{
+		   "message" : "Input is undefined"
+		}
+	 
+
+
+Request all the stories currently in the DB (for test propuse only!!!) :
+
+	RestAPI route  : "domain.../api/story"
+	http verb used :  "GET"
+
+	In the case of success following respond will be send to a caller :
+
+	JSON - 
+	      [
+		"_id": %userid%,
+    
+		"sharedFlag": %sharedFlag%,
+    
+		"style": %style%,
+    
+		"endLocation": %endLocation%,
+    
+		"startLocation": %startLocation%,
+   
+		"storyID": %storyID%,
+    
+		"username":  %username%,
+    
+		"__v": 0
+	      ]
+
+
+
+
+
+
+
+
